@@ -1,0 +1,56 @@
+.root{
+    -fx-background-color: rgb(255, 255, 255);
+    -fx-font: 14 arial; 
+}
+
+.toptext {
+    -fx-background-color: #1345e9;
+    
+    
+  
+}
+.functionStyles {
+    -fx-font: 14 arial; 
+}
+
+.myCancelButton {
+    -fx-background-color: #f7f9fc;
+    -fx-border-color: rgb(218, 218, 218);
+    -fx-background-radius: 30px;
+    -fx-border-width: 1;
+    -fx-border-radius: 30px;
+    -fx-text-fill: rgb(17, 0, 255);
+    
+        
+}
+myAll{
+    -fx-padding : 20px;
+}
+
+.myCancelButton:hover {
+    -fx-background-color: #e6e6e6;
+  }
+
+  .mySendButton {
+    -fx-background-color: #f7f9fc;
+    -fx-border-color: rgb(218, 218, 218);
+    -fx-background-radius: 30px;
+    -fx-border-width: 1;
+    -fx-border-radius: 30px;
+    -fx-text-fill: rgb(17, 0, 255);
+    
+    
+        
+}
+
+.mySendButton:hover {
+    -fx-background-color: #e6e6e6;
+  }
+
+.myTextField {
+    
+    -fx-background-color: #eceff1;
+    -fx-background-radius: 30px;
+    -fx-border-radius: 30px;
+    -fx-border-color: #eceff1;
+}
