@@ -1,6 +1,9 @@
 const db = require ('../db/models');
 
-// this part contains user access services form databse
+
+/**
+ * This class contains functions for all user services.
+ */
 class UserServices {
   static async findUserByPhone(phone) {
     try {
@@ -11,7 +14,21 @@ class UserServices {
       return undefined;
     }
   }
-static async updateBalance(amount, phone) {
+
+  static async finduserByPin( pin){
+    try {
+      const user = await db.users.findOne(
+        { where: { pin } });
+        if (!user) return null;
+        return user;
+    } catch (error) {
+      return error;
+    }
+  }
+
+
+
+  static async updateBalance(amount, phone) {
     try {
       const user = await db.users.update(
        { amount},
@@ -22,7 +39,8 @@ static async updateBalance(amount, phone) {
       return error;
     }
   }
- static async changePin(pin, phone) {
+
+  static async changePin(pin, phone) {
     try {
       const user = await db.users.update(
        { pin},

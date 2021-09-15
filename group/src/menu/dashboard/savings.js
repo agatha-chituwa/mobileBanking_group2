@@ -2,28 +2,32 @@ const express = require("express");
 const _ = require('lodash');
 
 const UserService = require("../../services/user.service");
-module.exports = menu => {
 
+module.exports = menu => {
+  let date_ob = new Date();
   // Define menu states
   menu.state("dashboard.savings", {
-  run: async () => {
+    run: async () => {
+      // use menu.con() to send response without terminating session
 
-      // use menu.con() to send response with no terminating session
       const { phoneNumber } = menu.args;
+
       const user = await UserService.findUserByPhone(phoneNumber);
-      menu.con(`You have so far saved ${user.amount} RWF \n 0. Dashboard`);
-      },
 
-    // next object links to next state based on user inputs
+      menu.con(`balance as on ${date_ob.getDate()}/${date_ob.getMonth()}/${date_ob.getFullYear()} for:${phoneNumber} is MWk:${user.amount}  \n 0. main menu`);
+    },
+    // next object links to next state based on user input
     next: {
-    "0": "dashboard",
+      "0": "dashboard",
     },
-    });
+  });
 
-    menu.state("invalidOption", {
+  menu.state("invalidOption", {
     run: () => {
-    menu.end(`Invalid option`);
+      menu.end(`Invalid option`);
     },
-    });
-    return menu;
-    };
+  });
+
+  return menu;
+};
+

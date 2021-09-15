@@ -11,7 +11,8 @@ module.exports = {
                     firstName: "agatha",
                     lastName: "Chituwa",
                     phone: "+265992871482",
-                    pin: 0042,
+                    pin: 0042
+                    ,
                     amount: 100000,
                     createdAt : "2021-09-28T10:55:51.603Z",
                     updateAt : "2021-09-28T10:55:51.603Z"

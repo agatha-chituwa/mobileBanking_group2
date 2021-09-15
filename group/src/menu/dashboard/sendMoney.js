@@ -5,50 +5,49 @@ const sessionMenu = require("../../utils/sessionHandler");
 const UserService = require("../../services/user.service");
 let sessions = {};
 
-     module.exports = (menu) => {
-    // Defining menu states
-    menu.state("dashboard.sendMoney", {
+module.exports = (menu) => {
+  // Define menu states
+  menu.state("dashboard.sendMoney", {
     run: async () => {
-    const { val } = menu;
-    menu.con(`Enter amount to send`);
+      const { val } = menu;
+      menu.con(`Enter amount to send`);
     },
-    // next object links to next state based on user inputs
+    // next object links to next state based on user input
     next: {
-    "*\\d": "dashboard.sendMoney.receiver",
+      "*\\d": "dashboard.sendMoney.receiver",
     },
     defaultNext: "invalidOption",
-    });
+  });
 
   menu.state("dashboard.sendMoney.receiver", {
-  run: async () => {
-  const {
-  val,
-  args: { phoneNumber },
-  } = menu;
-  sessions["amount"] = val;
-  const user = await UserService.findUserByPhone(phoneNumber);
+    run: async () => {
+      const {
+        val,
+        args: { phoneNumber },
+      } = menu;
+      sessions["amount"] = val;
+      const user = await UserService.findUserByPhone(phoneNumber);
 
       const enteredAmount = JSON.parse(val);
       console.log(enteredAmount, user.amount);
       if (val > user.amount) {
-       menu.end("Sorry, you don't have sufficient amount to send!");
+        menu.end("Sorry, you  insufficient funds!");
       } else {
-       menu.con(`Enter phone number to send to`);
+        menu.con(`Enter phone number to send to`);
       }
-      },
-
-    // next object links to next state based on user inputs
+    },
+    // next object links to next state based on user input
     next: {
-    "*\\d{10}": "dashboard.sendMoney.send",
+      "*\\d{10}": "dashboard.sendMoney.send",
     },
     defaultNext: "invalidOption",
-    });
+  });
 
-       menu.state("dashboard.sendMoney.send", {
-       run: async () => {
-       const {
-      val,
-      args: { phoneNumber },
+  menu.state("dashboard.sendMoney.send", {
+    run: async () => {
+      const {
+        val,
+        args: { phoneNumber },
       } = menu;
 
       const sender = await UserService.findUserByPhone(phoneNumber);
@@ -61,25 +60,26 @@ let sessions = {};
         const senderPhone = phoneNumber;
         const receiverPhone = reciever.phone;
         await UserService.updateBalance(balance, senderPhone);
-        await UserService.updateBalance(amountToSend + reciever.amount, receiverPhone);
-
+        const fullAmount  = parseFloat(amountToSend) + parseFloat(reciever.amount)
+        await UserService.updateBalance(fullAmount, receiverPhone);
         menu.end(
-        `You have successfully sent RWF ${amountToSend} to ${reciever.firstName} ${reciever.lastName} (${reciever.phone}). Your new balance is RWF ${balance}`
+          `You have successfully sent MWk ${amountToSend} to ${reciever.firstName} ${reciever.lastName} (${reciever.phone}). Your new balance is RWF ${balance}`
         );
-        } else {
+      } else {
         menu.end("Invalid receipient");
-        }
-        },
+      }
+    },
+    // next object links to next state based on user input
+    next: {
+      "*\\d{10}": "dashboard.sendMoney.send",
+    },
+  });
 
-       // next object links to next state based on user inputs
-       next: {
-       "*\\d{10}": "dashboard.sendMoney.send",
-       },
-       });
-       menu.state("invalidOption", {
-       run: () => {
-       menu.end(`Incorrect input`);
-       },
-       });
-      return menu;
-      };
+  menu.state("invalidOption", {
+    run: () => {
+      menu.end(`Incorrect input`);
+    },
+  });
+
+  return menu;
+};
